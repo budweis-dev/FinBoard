@@ -67,7 +67,16 @@ jobs:
           cp index.html build/ || echo "Error copying index.html"
           
           echo "Kopírování src adresáře..."
-          cp -r src/* build/src/ || echo "Error copying src directory"
+          mkdir -p build/src/components
+          mkdir -p build/src/services
+          mkdir -p build/src/utils
+          mkdir -p build/src/styles
+          
+          cp -r src/components/* build/src/components/ || echo "Error copying components directory"
+          cp -r src/services/* build/src/services/ || echo "Error copying services directory"
+          cp -r src/utils/* build/src/utils/ || echo "Error copying utils directory"
+          cp -r src/styles/* build/src/styles/ || echo "Error copying styles directory"
+          cp -r src/App.js build/src/ || echo "Error copying App.js"
           
           echo "Kopírování @tanstack knihoven..."
           if [ -d "node_modules/@tanstack/react-query" ]; then
