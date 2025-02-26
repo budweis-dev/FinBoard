@@ -49,6 +49,53 @@ All API calls are managed using React Query for efficient caching, background re
 3. Run `npm start` to start the development server
 4. Open your browser at the URL shown in the console
 
+## API Testing
+
+The project includes a comprehensive API testing suite:
+
+- **Command-line tests**: Run `node src/tests/runTests.js all` to test all API integrations
+- **Browser-based tests**: Open `src/tests/apiTests.html` in your browser for interactive testing
+- **Individual API tests**: Test specific APIs with commands like `node src/tests/runTests.js coingecko BTC`
+
+For more details, see the [API Tests README](src/tests/README.md).
+
+## Deployment
+
+### GitHub Pages
+
+This project is configured for automatic deployment to GitHub Pages using GitHub Actions:
+
+1. Push your changes to the main branch
+2. GitHub Actions will automatically build and deploy the application
+3. Access your deployed application at `https://[your-username].github.io/tradindBoard/`
+
+To set up GitHub Pages deployment:
+
+1. Fork or push this repository to your GitHub account
+2. Go to repository Settings → Pages
+3. Select "GitHub Actions" as the source
+4. (Optional) Configure API keys as repository secrets in Settings → Secrets and variables → Actions
+
+### Manual Deployment
+
+To deploy manually:
+
+1. Build the project: `npm run build`
+2. Deploy the contents of the `build` directory to your web server
+
+## Environment Variables
+
+Create a `.env` file in the root directory with your API keys:
+
+```
+COINGECKO_API_KEY=your_key
+ALPHAVANTAGE_API_KEY=your_key
+NEWSAPI_API_KEY=your_key
+CRYPTOCOMPARE_API_KEY=your_key
+```
+
+For GitHub Actions deployment, add these as repository secrets.
+
 ## Customization
 
 The dashboard is fully customizable. You can:

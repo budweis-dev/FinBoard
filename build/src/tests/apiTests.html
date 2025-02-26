@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Testy - Trading Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .api-result {
+            margin-top: 20px;
+            display: none;
+        }
+        .spinner-border {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-4">
+        <h1 class="mb-4">API Testy - Trading Dashboard</h1>
+        
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>CoinGecko API Test</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="coinGeckoSymbol" class="form-label">Symbol</label>
+                            <input type="text" class="form-control" id="coinGeckoSymbol" value="BTC">
+                        </div>
+                        <button class="btn btn-primary" id="testCoinGecko">
+                            Test CoinGecko API
+                            <span class="spinner-border spinner-border-sm" id="coinGeckoSpinner"></span>
+                        </button>
+                        <div class="api-result" id="coinGeckoResult">
+                            <h6 class="mt-3">Výsledek:</h6>
+                            <pre id="coinGeckoOutput"></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>NewsAPI Test</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="newsSearchTerm" class="form-label">Hledaný výraz</label>
+                            <input type="text" class="form-control" id="newsSearchTerm" value="bitcoin">
+                        </div>
+                        <button class="btn btn-primary" id="testNewsAPI">
+                            Test NewsAPI
+                            <span class="spinner-border spinner-border-sm" id="newsSpinner"></span>
+                        </button>
+                        <div class="api-result" id="newsResult">
+                            <h6 class="mt-3">Výsledek:</h6>
+                            <pre id="newsOutput"></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Alpha Vantage API Test</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="alphaVantageSymbol" class="form-label">Symbol</label>
+                            <input type="text" class="form-control" id="alphaVantageSymbol" value="MSFT">
+                        </div>
+                        <button class="btn btn-primary" id="testAlphaVantage">
+                            Test Alpha Vantage API
+                            <span class="spinner-border spinner-border-sm" id="alphaVantageSpinner"></span>
+                        </button>
+                        <div class="api-result" id="alphaVantageResult">
+                            <h6 class="mt-3">Výsledek:</h6>
+                            <pre id="alphaVantageOutput"></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>CryptoCompare API Test</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <label for="cryptoCompareFrom" class="form-label">Z měny</label>
+                                <input type="text" class="form-control" id="cryptoCompareFrom" value="BTC">
+                            </div>
+                            <div class="col-6">
+                                <label for="cryptoCompareTo" class="form-label">Na měnu</label>
+                                <input type="text" class="form-control" id="cryptoCompareTo" value="USD">
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" id="testCryptoCompare">
+                            Test CryptoCompare API
+                            <span class="spinner-border spinner-border-sm" id="cryptoCompareSpinner"></span>
+                        </button>
+                        <div class="api-result" id="cryptoCompareResult">
+                            <h6 class="mt-3">Výsledek:</h6>
+                            <pre id="cryptoCompareOutput"></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>Spustit všechny testy</h5>
+            </div>
+            <div class="card-body">
+                <button class="btn btn-success" id="runAllTests">
+                    Spustit všechny testy
+                    <span class="spinner-border spinner-border-sm" id="allTestsSpinner"></span>
+                </button>
+                <div class="api-result" id="allTestsResult">
+                    <h6 class="mt-3">Výsledky:</h6>
+                    <pre id="allTestsOutput"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        // API konfigurace
+        const apiConfig = {
+            // CoinGecko API
+            coinGecko: {
+                baseUrl: 'https://api.coingecko.com/api/v3',
+                apiKey: '', // Přidejte API klíč, pokud máte
+            },
+            
+            // Alpha Vantage API
+            alphaVantage: {
+                baseUrl: 'https://www.alphavantage.co/query',
+                apiKey: 'demo', // Použijte demo klíč nebo vlastní
+            },
+            
+            // NewsAPI
+            newsAPI: {
+                baseUrl: 'https://newsapi.org/v2',
+                apiKey: '8c3fb4fd9bef4a86a2dd1e4ec00b32bf', // Použijte vlastní klíč
+            },
+            
+            // Crypto Compare API
+            cryptoCompare: {
+                baseUrl: 'https://min-api.cryptocompare.com/data',
+                apiKey: '', // Přidejte API klíč, pokud máte
+            },
+            
+            // Mappings pro symboly
+            symbolMappings: {
+                'BTC': 'bitcoin',
+                'ETH': 'ethereum',
+                'LTC': 'litecoin',
+                'XRP': 'ripple',
+                'ADA': 'cardano',
+                'DOT': 'polkadot',
+                'DOGE': 'dogecoin',
+            },
+        };
+
+        // Helper funkce
+        const getCoinGeckoId = (symbol) => {
+            if (!symbol) return null;
+            return apiConfig.symbolMappings[symbol] || symbol.toLowerCase();
+        };
+
+        // Funkce pro formátování JSON výstupu
+        const formatOutput = (data) => {
+            return JSON.stringify(data, null, 2);
+        };
+
+        // Test CoinGecko API
+        async function testCoinGeckoPrice(symbol = 'BTC') {
+            try {
+                const coinId = getCoinGeckoId(symbol);
+                if (!coinId) throw new Error('Neznámý symbol');
+                
+                const apiUrl = `${apiConfig.coinGecko.baseUrl}/simple/price`;
+                const params = {
+                    ids: coinId,
+                    vs_currencies: 'usd',
+                    include_24hr_change: true,
+                };
+                
+                // Přidání API klíče, pokud je dostupný
+                if (apiConfig.coinGecko.apiKey) {
+                    params.x_cg_pro_api_key = apiConfig.coinGecko.apiKey;
+                }
+                
+                const response = await axios.get(apiUrl, { params });
+                return response.data;
+            } catch (error) {
+                return {
+                    error: error.message,
+                    status: error.response?.status,
+                    data: error.response?.data
+                };
+            }
+        }
+
+        // Test NewsAPI
+        async function testNewsAPI(searchTerm = 'cryptocurrency') {
+            try {
+                const apiUrl = `${apiConfig.newsAPI.baseUrl}/everything`;
+                const params = {
+                    q: searchTerm,
+                    apiKey: apiConfig.newsAPI.apiKey,
+                    language: 'en',
+                    pageSize: 5,
+                    sortBy: 'publishedAt',
+                };
+                
+                const response = await axios.get(apiUrl, { params });
+                return {
+                    totalResults: response.data.totalResults,
+                    articles: response.data.articles.slice(0, 5)
+                };
+            } catch (error) {
+                return {
+                    error: error.message,
+                    status: error.response?.status,
+                    data: error.response?.data
+                };
+            }
+        }
+
+        // Test Alpha Vantage API
+        async function testAlphaVantageAPI(symbol = 'MSFT') {
+            try {
+                const apiUrl = apiConfig.alphaVantage.baseUrl;
+                const params = {
+                    function: 'GLOBAL_QUOTE',
+                    symbol: symbol,
+                    apikey: apiConfig.alphaVantage.apiKey,
+                };
+                
+                const response = await axios.get(apiUrl, { params });
+                return response.data;
+            } catch (error) {
+                return {
+                    error: error.message,
+                    status: error.response?.status,
+                    data: error.response?.data
+                };
+            }
+        }
+
+        // Test CryptoCompare API
+        async function testCryptoCompareAPI(fsym = 'BTC', tsym = 'USD') {
+            try {
+                const apiUrl = `${apiConfig.cryptoCompare.baseUrl}/price`;
+                const params = {
+                    fsym: fsym,
+                    tsyms: tsym,
+                };
+                
+                // Přidání API klíče, pokud je dostupný
+                if (apiConfig.cryptoCompare.apiKey) {
+                    params.api_key = apiConfig.cryptoCompare.apiKey;
+                }
+                
+                const response = await axios.get(apiUrl, { params });
+                return response.data;
+            } catch (error) {
+                return {
+                    error: error.message,
+                    status: error.response?.status,
+                    data: error.response?.data
+                };
+            }
+        }
+
+        // Event listenery
+        document.getElementById('testCoinGecko').addEventListener('click', async () => {
+            const symbol = document.getElementById('coinGeckoSymbol').value;
+            const spinner = document.getElementById('coinGeckoSpinner');
+            const result = document.getElementById('coinGeckoResult');
+            const output = document.getElementById('coinGeckoOutput');
+            
+            spinner.style.display = 'inline-block';
+            result.style.display = 'none';
+            
+            const data = await testCoinGeckoPrice(symbol);
+            
+            output.textContent = formatOutput(data);
+            result.style.display = 'block';
+            spinner.style.display = 'none';
+        });
+
+        document.getElementById('testNewsAPI').addEventListener('click', async () => {
+            const searchTerm = document.getElementById('newsSearchTerm').value;
+            const spinner = document.getElementById('newsSpinner');
+            const result = document.getElementById('newsResult');
+            const output = document.getElementById('newsOutput');
+            
+            spinner.style.display = 'inline-block';
+            result.style.display = 'none';
+            
+            const data = await testNewsAPI(searchTerm);
+            
+            output.textContent = formatOutput(data);
+            result.style.display = 'block';
+            spinner.style.display = 'none';
+        });
+
+        document.getElementById('testAlphaVantage').addEventListener('click', async () => {
+            const symbol = document.getElementById('alphaVantageSymbol').value;
+            const spinner = document.getElementById('alphaVantageSpinner');
+            const result = document.getElementById('alphaVantageResult');
+            const output = document.getElementById('alphaVantageOutput');
+            
+            spinner.style.display = 'inline-block';
+            result.style.display = 'none';
+            
+            const data = await testAlphaVantageAPI(symbol);
+            
+            output.textContent = formatOutput(data);
+            result.style.display = 'block';
+            spinner.style.display = 'none';
+        });
+
+        document.getElementById('testCryptoCompare').addEventListener('click', async () => {
+            const fromSymbol = document.getElementById('cryptoCompareFrom').value;
+            const toSymbol = document.getElementById('cryptoCompareTo').value;
+            const spinner = document.getElementById('cryptoCompareSpinner');
+            const result = document.getElementById('cryptoCompareResult');
+            const output = document.getElementById('cryptoCompareOutput');
+            
+            spinner.style.display = 'inline-block';
+            result.style.display = 'none';
+            
+            const data = await testCryptoCompareAPI(fromSymbol, toSymbol);
+            
+            output.textContent = formatOutput(data);
+            result.style.display = 'block';
+            spinner.style.display = 'none';
+        });
+
+        document.getElementById('runAllTests').addEventListener('click', async () => {
+            const spinner = document.getElementById('allTestsSpinner');
+            const result = document.getElementById('allTestsResult');
+            const output = document.getElementById('allTestsOutput');
+            
+            spinner.style.display = 'inline-block';
+            result.style.display = 'none';
+            
+            output.textContent = "Spouštím všechny testy...\n";
+            
+            // CoinGecko
+            output.textContent += "\n=== TEST 1: CoinGecko API ===\n";
+            const coinGeckoData = await testCoinGeckoPrice('BTC');
+            output.textContent += formatOutput(coinGeckoData) + "\n";
+            
+            // NewsAPI
+            output.textContent += "\n=== TEST 2: NewsAPI ===\n";
+            const newsData = await testNewsAPI('bitcoin');
+            output.textContent += formatOutput(newsData) + "\n";
+            
+            // Alpha Vantage
+            output.textContent += "\n=== TEST 3: Alpha Vantage API ===\n";
+            const alphaVantageData = await testAlphaVantageAPI('MSFT');
+            output.textContent += formatOutput(alphaVantageData) + "\n";
+            
+            // CryptoCompare
+            output.textContent += "\n=== TEST 4: CryptoCompare API ===\n";
+            const cryptoCompareData = await testCryptoCompareAPI('BTC', 'USD');
+            output.textContent += formatOutput(cryptoCompareData) + "\n";
+            
+            output.textContent += "\n=== TESTY DOKONČENY ===\n";
+            
+            result.style.display = 'block';
+            spinner.style.display = 'none';
+        });
+    </script>
+</body>
+</html>

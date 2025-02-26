@@ -29,6 +29,22 @@
 
     <!-- Main CSS -->
     <link rel="stylesheet" href="../src/styles/main.css">
+    
+    <!-- Dynamicky nastavíme base path pro GitHub Pages nebo lokální vývoj -->
+    <script>
+        // Detekce, zda jsme na GitHub Pages nebo lokálně
+        const isGitHubPages = window.location.hostname.includes('github.io');
+        
+        // Nastavení base path podle prostředí
+        window.basePath = isGitHubPages ? '/tradindBoard' : '';
+        
+        // Helper funkce pro získání správné cesty k souborům
+        window.getPath = (path) => {
+            // Odstraníme úvodní lomítko, pokud existuje
+            const cleanPath = path.startsWith('/') ? path.substring(1) : path;
+            return `${window.basePath}/${cleanPath}`;
+        };
+    </script>
 </head>
 <body>
     <div id="root"></div>
@@ -55,5 +71,22 @@
     <!-- Main app -->
     <script type="text/babel" src="../src/App.js"></script>
     <script type="text/babel" src="../src/index.js"></script>
+    
+    <!-- Script pro opravu cest na GitHub Pages -->
+    <script>
+        // Pokud jsme na GitHub Pages, upravíme všechny src atributy skriptů
+        if (window.location.hostname.includes('github.io')) {
+            document.querySelectorAll('script[src], link[href]').forEach(element => {
+                const srcAttr = element.hasAttribute('src') ? 'src' : 'href';
+                const originalPath = element.getAttribute(srcAttr);
+                
+                // Upravíme pouze relativní cesty začínající na ../
+                if (originalPath && originalPath.startsWith('../')) {
+                    const newPath = originalPath.replace('../', '/tradindBoard/');
+                    element.setAttribute(srcAttr, newPath);
+                }
+            });
+        }
+    </script>
 </body>
 </html>

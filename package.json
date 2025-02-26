@@ -4,7 +4,8 @@
   "description": "Interactive trading dashboard application",
   "main": "public/index.html",
   "scripts": {
-    "start": "npx http-server . -o /public/index.html"
+    "start": "npx http-server . -o /public/index.html",
+    "build": "mkdir -p build && cp -r public/* build/ && cp index.html build/ && cp -r src build/ && mkdir -p build/node_modules/@tanstack && cp -r node_modules/@tanstack/react-query build/node_modules/@tanstack/ && mkdir -p build/node_modules/axios && cp -r node_modules/axios/dist build/node_modules/axios/"
   },
   "author": "",
   "license": "ISC",
