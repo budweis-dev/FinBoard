@@ -22,7 +22,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="src/styles/main.css">
+    <link rel="stylesheet" id="main-css" href="src/styles/main.css">
     
     <!-- Dynamicky nastavíme base path pro GitHub Pages nebo lokální vývoj -->
     <script>
@@ -38,6 +38,39 @@
             const cleanPath = path.startsWith('/') ? path.substring(1) : path;
             return `${window.basePath}/${cleanPath}`;
         };
+
+        // Funkce pro nastavení správných cest k souborům
+        function updateResourcePaths() {
+            // Seznam ID elementů a jejich atributů, které je třeba upravit
+            const resources = [
+                { id: 'main-css', attr: 'href', path: 'src/styles/main.css' },
+                { id: 'env-script', attr: 'src', path: 'src/utils/env.js' },
+                { id: 'header-script', attr: 'src', path: 'src/components/layout/TabNavigation.js' },
+                { id: 'dashboard-script', attr: 'src', path: 'src/components/layout/AdminPanel.js' },
+                { id: 'price-chart-script', attr: 'src', path: 'src/components/modules/PairChart.js' },
+                { id: 'order-book-script', attr: 'src', path: 'src/components/modules/PairDashboard.js' },
+                { id: 'trade-history-script', attr: 'src', path: 'src/components/modules/PriceTicker.js' },
+                { id: 'news-widget-script', attr: 'src', path: 'src/components/modules/NewsFeed.js' },
+                { id: 'opening-hours-script', attr: 'src', path: 'src/components/modules/OpeningHours.js' },
+                { id: 'instrument-dashboard-script', attr: 'src', path: 'src/components/modules/InstrumentDashboard.js' },
+                { id: 'module-component-script', attr: 'src', path: 'src/components/modules/ModuleComponent.js' },
+                { id: 'api-config-script', attr: 'src', path: 'src/services/apiConfig.js' },
+                { id: 'data-service-script', attr: 'src', path: 'src/services/dataService.js' },
+                { id: 'app-script', attr: 'src', path: 'src/App.js' },
+                { id: 'helpers-script', attr: 'src', path: 'src/utils/helpers.js' }
+            ];
+
+            // Pro každý zdroj nastavíme správnou cestu
+            resources.forEach(resource => {
+                const element = document.getElementById(resource.id);
+                if (element) {
+                    element.setAttribute(resource.attr, window.getPath(resource.path));
+                }
+            });
+        }
+
+        // Aktualizujeme cesty co nejdříve
+        document.addEventListener('DOMContentLoaded', updateResourcePaths);
     </script>
 </head>
 <body>
@@ -53,21 +86,25 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <!-- Utility functions -->
-    <script type="text/babel" src="src/utils/env.js"></script>
+    <script type="text/babel" id="env-script" src="src/utils/env.js"></script>
+    <script type="text/babel" id="helpers-script" src="src/utils/helpers.js"></script>
     
     <!-- Komponenty aplikace -->
-    <script type="text/babel" src="src/components/Header.js"></script>
-    <script type="text/babel" src="src/components/Dashboard.js"></script>
-    <script type="text/babel" src="src/components/PriceChart.js"></script>
-    <script type="text/babel" src="src/components/OrderBook.js"></script>
-    <script type="text/babel" src="src/components/TradeHistory.js"></script>
-    <script type="text/babel" src="src/components/NewsWidget.js"></script>
+    <script type="text/babel" id="header-script" src="src/components/layout/TabNavigation.js"></script>
+    <script type="text/babel" id="dashboard-script" src="src/components/layout/AdminPanel.js"></script>
+    <script type="text/babel" id="price-chart-script" src="src/components/modules/PairChart.js"></script>
+    <script type="text/babel" id="order-book-script" src="src/components/modules/PairDashboard.js"></script>
+    <script type="text/babel" id="trade-history-script" src="src/components/modules/PriceTicker.js"></script>
+    <script type="text/babel" id="news-widget-script" src="src/components/modules/NewsFeed.js"></script>
+    <script type="text/babel" id="opening-hours-script" src="src/components/modules/OpeningHours.js"></script>
+    <script type="text/babel" id="instrument-dashboard-script" src="src/components/modules/InstrumentDashboard.js"></script>
+    <script type="text/babel" id="module-component-script" src="src/components/modules/ModuleComponent.js"></script>
     
     <!-- Služby pro práci s API -->
-    <script type="text/babel" src="src/services/apiConfig.js"></script>
-    <script type="text/babel" src="src/services/dataService.js"></script>
+    <script type="text/babel" id="api-config-script" src="src/services/apiConfig.js"></script>
+    <script type="text/babel" id="data-service-script" src="src/services/dataService.js"></script>
     
     <!-- Hlavní aplikace -->
-    <script type="text/babel" src="src/App.js"></script>
+    <script type="text/babel" id="app-script" src="src/App.js"></script>
 </body>
 </html>
