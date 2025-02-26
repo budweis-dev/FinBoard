@@ -31,20 +31,26 @@
         
         // Nastavení base path podle prostředí
         window.basePath = isGitHubPages ? '/FinBoard' : '';
+        console.log('Environment:', isGitHubPages ? 'GitHub Pages' : 'Local');
+        console.log('Base Path:', window.basePath);
         
         // Helper funkce pro získání správné cesty k souborům
         window.getPath = (path) => {
             // Odstraníme úvodní lomítko, pokud existuje
             const cleanPath = path.startsWith('/') ? path.substring(1) : path;
-            return `${window.basePath}/${cleanPath}`;
+            const fullPath = `${window.basePath}/${cleanPath}`;
+            console.log(`getPath('${path}') => '${fullPath}'`);
+            return fullPath;
         };
 
         // Funkce pro nastavení správných cest k souborům
         function updateResourcePaths() {
+            console.log('updateResourcePaths started');
             // Seznam ID elementů a jejich atributů, které je třeba upravit
             const resources = [
                 { id: 'main-css', attr: 'href', path: 'src/styles/main.css' },
                 { id: 'env-script', attr: 'src', path: 'src/utils/env.js' },
+                { id: 'helpers-script', attr: 'src', path: 'src/utils/helpers.js' },
                 { id: 'header-script', attr: 'src', path: 'src/components/layout/TabNavigation.js' },
                 { id: 'dashboard-script', attr: 'src', path: 'src/components/layout/AdminPanel.js' },
                 { id: 'price-chart-script', attr: 'src', path: 'src/components/modules/PairChart.js' },
@@ -56,25 +62,35 @@
                 { id: 'module-component-script', attr: 'src', path: 'src/components/modules/ModuleComponent.js' },
                 { id: 'api-config-script', attr: 'src', path: 'src/services/apiConfig.js' },
                 { id: 'data-service-script', attr: 'src', path: 'src/services/dataService.js' },
-                { id: 'app-script', attr: 'src', path: 'src/App.js' },
-                { id: 'helpers-script', attr: 'src', path: 'src/utils/helpers.js' }
+                { id: 'app-script', attr: 'src', path: 'src/App.js' }
             ];
 
             // Pro každý zdroj nastavíme správnou cestu
             resources.forEach(resource => {
                 const element = document.getElementById(resource.id);
                 if (element) {
-                    element.setAttribute(resource.attr, window.getPath(resource.path));
+                    const newPath = window.getPath(resource.path);
+                    element.setAttribute(resource.attr, newPath);
+                    console.log(`Updated ${resource.id}: ${resource.attr}="${newPath}"`);
+                } else {
+                    console.warn(`Element ${resource.id} not found in DOM`);
                 }
             });
+            console.log('updateResourcePaths completed');
         }
 
-        // Aktualizujeme cesty co nejdříve
-        document.addEventListener('DOMContentLoaded', updateResourcePaths);
+        // Aktualizujeme cesty po kompletním načtení stránky
+        window.onload = function() {
+            updateResourcePaths();
+            console.log('Paths updated after window load');
+        };
+        
+        // Také zkusíme při DOMContentLoaded
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM content loaded, updating paths');
+            updateResourcePaths();
+        });
     </script>
-</head>
-<body>
-    <div id="root"></div>
     
     <!-- Axios pro HTTP požadavky -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -106,5 +122,8 @@
     
     <!-- Hlavní aplikace -->
     <script type="text/babel" id="app-script" src="src/App.js"></script>
+</head>
+<body>
+    <div id="root"></div>
 </body>
 </html>
