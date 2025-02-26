@@ -10,7 +10,7 @@ Projekt je nakonfigurován pro automatické nasazení na GitHub Pages pomocí Gi
 
 1. Nahraj repozitář na GitHub:
    ```bash
-   git remote add origin https://github.com/tvoje-username/tradindBoard.git
+   git remote add origin https://github.com/tvoje-username/FinBoard.git
    git push -u origin main
    ```
 
@@ -28,7 +28,7 @@ Projekt je nakonfigurován pro automatické nasazení na GitHub Pages pomocí Gi
 
 4. Po úspěšném nasazení bude tvoje aplikace dostupná na:
    ```
-   https://tvoje-username.github.io/tradindBoard/
+   https://tvoje-username.github.io/FinBoard/
    ```
 
 ## Struktura projektu pro GitHub Pages
