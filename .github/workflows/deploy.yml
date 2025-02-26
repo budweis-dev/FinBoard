@@ -59,57 +59,55 @@ jobs:
         run: |
           mkdir -p build/node_modules/@tanstack
           mkdir -p build/node_modules/axios
+          mkdir -p build/src
 
       - name: Copy static files
         run: |
-          echo "Copying public directory..."
-          cp -r public/* build/ || echo "Error copying public directory"
-          
-          echo "Copying index.html..."
+          echo "Kopírování index.html..."
           cp index.html build/ || echo "Error copying index.html"
           
-          echo "Copying src directory..."
-          cp -r src build/ || echo "Error copying src directory"
+          echo "Kopírování src adresáře..."
+          cp -r src/* build/src/ || echo "Error copying src directory"
           
-          echo "Copying @tanstack libraries..."
+          echo "Kopírování @tanstack knihoven..."
           if [ -d "node_modules/@tanstack/react-query" ]; then
             cp -r node_modules/@tanstack/react-query build/node_modules/@tanstack/
           elif [ -d "node_modules/@tanstack" ]; then
             cp -r node_modules/@tanstack/* build/node_modules/@tanstack/
           else
-            echo "Warning: @tanstack libraries not found"
+            echo "Warning: @tanstack knihovny nenalezeny"
           fi
           
-          echo "Copying axios library..."
+          echo "Kopírování axios knihovny..."
           if [ -d "node_modules/axios/dist" ]; then
             cp -r node_modules/axios/dist build/node_modules/axios/
           elif [ -d "node_modules/axios" ]; then
             cp -r node_modules/axios build/node_modules/
           else
-            echo "Warning: axios library not found"
+            echo "Warning: axios knihovna nenalezena"
           fi
           
-          echo "Creating .nojekyll file..."
+          echo "Vytváření .nojekyll souboru..."
           touch build/.nojekyll
           
-          echo "Build directory structure after copying:"
+          echo "Struktura adresáře build po kopírování:"
           ls -la build/
-          echo "Build node_modules structure:"
-          ls -la build/node_modules/ || echo "Directory not found"
-          echo "Build node_modules/@tanstack structure:"
-          ls -la build/node_modules/@tanstack/ || echo "Directory not found"
+          echo "Struktura adresáře build/node_modules:"
+          ls -la build/node_modules/ || echo "Adresář nenalezen"
+          echo "Struktura adresáře build/node_modules/@tanstack:"
+          ls -la build/node_modules/@tanstack/ || echo "Adresář nenalezen"
 
       - name: Create .env file
         run: |
-          echo "Creating .env file..."
+          echo "Vytváření .env souboru..."
           echo "COINGECKO_API_KEY=${{ secrets.COINGECKO_API_KEY || '' }}" > build/.env
           echo "ALPHAVANTAGE_API_KEY=${{ secrets.ALPHAVANTAGE_API_KEY || 'demo' }}" >> build/.env
           echo "NEWSAPI_API_KEY=${{ secrets.NEWSAPI_API_KEY || '8c3fb4fd9bef4a86a2dd1e4ec00b32bf' }}" >> build/.env
           echo "CRYPTOCOMPARE_API_KEY=${{ secrets.CRYPTOCOMPARE_API_KEY || '' }}" >> build/.env
           
-          echo ".env file created successfully"
-          echo "Contents of .env file (without API keys):"
-          grep -v "API_KEY" build/.env || echo "No non-API_KEY lines found"
+          echo ".env soubor vytvořen úspěšně"
+          echo "Obsah .env souboru (bez API klíčů):"
+          grep -v "API_KEY" build/.env || echo "Žádné řádky bez API_KEY nalezeny"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

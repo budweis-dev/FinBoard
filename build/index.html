@@ -2,20 +2,69 @@
 <html lang="cs">
 <head>
     <meta charset="UTF-8">
-    <title>Trading Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Aplikace</title>
+    
+    <!-- Bootstrap CSS z CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome pro ikony -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- React a ReactDOM z CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    
+    <!-- Babel pro JSX transpilaci -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.21.2/babel.min.js"></script>
+    
+    <!-- Chart.js pro grafy -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="src/styles/main.css">
+    
+    <!-- Dynamicky nastavíme base path pro GitHub Pages nebo lokální vývoj -->
     <script>
         // Detekce, zda jsme na GitHub Pages nebo lokálně
-        const isGitHubPages = window.location.hostname.includes('github.io');
+        const isGitHubPages = window.location.hostname.includes('github.io') || (window.GITHUB_PAGES === true);
         
-        // Nastavení správné cesty podle prostředí
-        const basePath = isGitHubPages ? '/tradindBoard' : '';
-        const targetPath = `${basePath}/public/index.html`;
+        // Nastavení base path podle prostředí
+        window.basePath = isGitHubPages ? '/tradindBoard' : '';
         
-        // Přesměrování
-        window.location.href = targetPath;
+        // Helper funkce pro získání správné cesty k souborům
+        window.getPath = (path) => {
+            // Odstraníme úvodní lomítko, pokud existuje
+            const cleanPath = path.startsWith('/') ? path.substring(1) : path;
+            return `${window.basePath}/${cleanPath}`;
+        };
     </script>
 </head>
 <body>
-    <p>Redirecting to the application. If you are not redirected automatically, follow this <a href="public/index.html">link</a>.</p>
+    <div id="root"></div>
+    
+    <!-- Axios pro HTTP požadavky -->
+    <script src="node_modules/axios/dist/axios.min.js"></script>
+    
+    <!-- React Query pro správu stavu a cachování -->
+    <script src="node_modules/@tanstack/react-query/build/umd/index.production.js"></script>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Komponenty aplikace -->
+    <script type="text/babel" src="src/components/Header.js"></script>
+    <script type="text/babel" src="src/components/Dashboard.js"></script>
+    <script type="text/babel" src="src/components/PriceChart.js"></script>
+    <script type="text/babel" src="src/components/OrderBook.js"></script>
+    <script type="text/babel" src="src/components/TradeHistory.js"></script>
+    <script type="text/babel" src="src/components/NewsWidget.js"></script>
+    
+    <!-- Služby pro práci s API -->
+    <script type="text/babel" src="src/services/apiConfig.js"></script>
+    <script type="text/babel" src="src/services/dataService.js"></script>
+    
+    <!-- Hlavní aplikace -->
+    <script type="text/babel" src="src/App.js"></script>
 </body>
 </html>

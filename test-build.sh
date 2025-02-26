@@ -19,17 +19,16 @@ mkdir -p build
 echo -e "${GREEN}Vytvářím adresářovou strukturu...${NC}"
 mkdir -p build/node_modules/@tanstack
 mkdir -p build/node_modules/axios
+mkdir -p build/src
 
 # Kopírování souborů
 echo -e "${GREEN}Kopíruji soubory...${NC}"
-echo "Kopírování public adresáře..."
-cp -r public/* build/ || echo -e "${RED}Chyba při kopírování public adresáře${NC}"
 
 echo "Kopírování index.html..."
 cp index.html build/ || echo -e "${RED}Chyba při kopírování index.html${NC}"
 
 echo "Kopírování src adresáře..."
-cp -r src build/ || echo -e "${RED}Chyba při kopírování src adresáře${NC}"
+cp -r src/* build/src/ || echo -e "${RED}Chyba při kopírování src adresáře${NC}"
 
 echo "Kopírování @tanstack knihoven..."
 if [ -d "node_modules/@tanstack/react-query" ]; then

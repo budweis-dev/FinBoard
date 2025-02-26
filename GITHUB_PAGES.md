@@ -31,6 +31,29 @@ Projekt je nakonfigurován pro automatické nasazení na GitHub Pages pomocí Gi
    https://tvoje-username.github.io/tradindBoard/
    ```
 
+## Struktura projektu pro GitHub Pages
+
+Pro správné fungování na GitHub Pages je důležité, aby projekt měl následující strukturu:
+
+1. Hlavní `index.html` musí být v kořenovém adresáři (ne v `/public`)
+2. Soubor `.nojekyll` musí být v kořenovém adresáři, aby GitHub Pages nepoužíval Jekyll
+3. Všechny cesty k souborům musí být relativní k `index.html`
+
+Aktuální struktura projektu je:
+
+```
+/
+├── index.html           # Hlavní HTML soubor
+├── .nojekyll            # Zabraňuje zpracování Jekyll
+├── src/                 # Zdrojové soubory
+│   ├── components/      # React komponenty
+│   ├── services/        # API služby
+│   └── styles/          # CSS styly
+└── node_modules/        # Knihovny (pouze potřebné)
+    ├── @tanstack/       # React Query
+    └── axios/           # HTTP klient
+```
+
 ## Testování buildu lokálně
 
 Před nahráním změn na GitHub můžeš otestovat build lokálně pomocí přiloženého skriptu:
