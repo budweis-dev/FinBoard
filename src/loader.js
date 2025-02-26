@@ -5,6 +5,7 @@ console.log('Script loader initializing...');
 const isGitHubPages = window.location.hostname.includes('github.io') || (window.GITHUB_PAGES === true);
 
 // Nastavení base path podle prostředí
+// Pozor: Název repozitáře na GitHub Pages musí přesně odpovídat (včetně velikosti písmen)
 window.basePath = isGitHubPages ? '/FinBoard' : '';
 console.log('Environment:', isGitHubPages ? 'GitHub Pages' : 'Local');
 console.log('Base Path:', window.basePath);

@@ -36,7 +36,7 @@
         const isGitHubPages = window.location.hostname.includes('github.io');
         
         // Nastavení base path podle prostředí
-        window.basePath = isGitHubPages ? '/tradindBoard' : '';
+        window.basePath = isGitHubPages ? '/FinBoard' : '';
         
         // Helper funkce pro získání správné cesty k souborům
         window.getPath = (path) => {
@@ -82,7 +82,7 @@
                 
                 // Upravíme pouze relativní cesty začínající na ../
                 if (originalPath && originalPath.startsWith('../')) {
-                    const newPath = originalPath.replace('../', '/tradindBoard/');
+                    const newPath = originalPath.replace('../', '/FinBoard/');
                     element.setAttribute(srcAttr, newPath);
                 }
             });

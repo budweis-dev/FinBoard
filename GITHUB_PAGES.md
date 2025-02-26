@@ -38,6 +38,7 @@ Pro správné fungování na GitHub Pages je důležité, aby projekt měl násl
 1. Hlavní `index.html` musí být v kořenovém adresáři (ne v `/public`)
 2. Soubor `.nojekyll` musí být v kořenovém adresáři, aby GitHub Pages nepoužíval Jekyll
 3. Všechny cesty k souborům musí být relativní k `index.html`
+4. Název repozitáře na GitHub Pages musí přesně odpovídat hodnotě v `basePath` (včetně velikosti písmen)
 
 Aktuální struktura projektu je:
 
