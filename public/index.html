@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Aplikace</title>
+    
+    <!-- Bootstrap CSS z CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome pro ikony -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- React a ReactDOM z CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    
+    <!-- Babel pro JSX transpilaci -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.21.2/babel.min.js"></script>
+    
+    <!-- Chart.js pro grafy -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.2.1/chart.umd.min.js"></script>
+    
+    <!-- Axios for HTTP requests -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    
+    <!-- React Query -->
+    <script src="https://cdn.jsdelivr.net/npm/@tanstack/react-query@4.32.0/build/umd/index.production.js"></script>
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="../src/styles/main.css">
+</head>
+<body>
+    <div id="root"></div>
+    
+    <!-- Import scripts -->
+    <script type="text/babel" src="../src/utils/env.js"></script>
+    <script type="text/babel" src="../src/utils/helpers.js"></script>
+    <script type="text/babel" src="../src/services/apiConfig.js"></script>
+    <script type="text/babel" src="../src/services/dataService.js"></script>
+    
+    <!-- Import modules -->
+    <script type="text/babel" src="../src/components/modules/PriceTicker.js"></script>
+    <script type="text/babel" src="../src/components/modules/OpeningHours.js"></script>
+    <script type="text/babel" src="../src/components/modules/PairChart.js"></script>
+    <script type="text/babel" src="../src/components/modules/NewsFeed.js"></script>
+    <script type="text/babel" src="../src/components/modules/InstrumentDashboard.js"></script>
+    <script type="text/babel" src="../src/components/modules/PairDashboard.js"></script>
+    <script type="text/babel" src="../src/components/modules/ModuleComponent.js"></script>
+    
+    <!-- Import layout -->
+    <script type="text/babel" src="../src/components/layout/AdminPanel.js"></script>
+    <script type="text/babel" src="../src/components/layout/TabNavigation.js"></script>
+    
+    <!-- Main app -->
+    <script type="text/babel" src="../src/App.js"></script>
+    <script type="text/babel" src="../src/index.js"></script>
+</body>
+</html>
