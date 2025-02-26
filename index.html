@@ -51,6 +51,7 @@
                 { id: 'main-css', attr: 'href', path: 'src/styles/main.css' },
                 { id: 'env-script', attr: 'src', path: 'src/utils/env.js' },
                 { id: 'helpers-script', attr: 'src', path: 'src/utils/helpers.js' },
+                { id: 'loader-script', attr: 'src', path: 'src/loader.js' },
                 { id: 'header-script', attr: 'src', path: 'src/components/layout/TabNavigation.js' },
                 { id: 'dashboard-script', attr: 'src', path: 'src/components/layout/AdminPanel.js' },
                 { id: 'price-chart-script', attr: 'src', path: 'src/components/modules/PairChart.js' },
@@ -83,6 +84,74 @@
         window.onload = function() {
             updateResourcePaths();
             console.log('Paths updated after window load');
+            
+            // QueryClient pro React Query
+            try {
+                if (typeof tanstack !== 'undefined' && typeof tanstack.createQueryClient !== 'undefined') {
+                    window.queryClient = new tanstack.createQueryClient({
+                        defaultOptions: {
+                            queries: {
+                                refetchOnWindowFocus: false,
+                                retry: 1,
+                            }
+                        }
+                    });
+                    
+                    window.QueryClientProvider = tanstack.QueryClientProvider;
+                } else if (typeof window.ReactQuery !== 'undefined') {
+                    // Alternativní přístup, pokud je ReactQuery dostupný v jiném jmenném prostoru
+                    window.queryClient = new window.ReactQuery.QueryClient({
+                        defaultOptions: {
+                            queries: {
+                                refetchOnWindowFocus: false,
+                                retry: 1,
+                            }
+                        }
+                    });
+                    
+                    window.QueryClientProvider = window.ReactQuery.QueryClientProvider;
+                } else {
+                    console.warn('React Query není dostupný, aplikace poběží bez něj');
+                    window.queryClient = null;
+                    window.QueryClientProvider = null;
+                }
+            } catch (e) {
+                console.error('Chyba při inicializaci React Query:', e);
+                window.queryClient = null;
+                window.QueryClientProvider = null;
+            }
+            
+            // Inicializace React aplikace
+            console.log('Initializing React application...');
+            try {
+                // Počkáme chvíli, aby se určitě stihly načíst všechny skripty
+                setTimeout(function() {
+                    if (window.App) {
+                        console.log('App component found, rendering...');
+                        if (window.queryClient && window.QueryClientProvider) {
+                            ReactDOM.render(
+                                React.createElement(
+                                    window.QueryClientProvider,
+                                    { client: window.queryClient },
+                                    React.createElement(window.App)
+                                ),
+                                document.getElementById('root')
+                            );
+                        } else {
+                            // Fallback bez React Query
+                            ReactDOM.render(
+                                React.createElement(window.App),
+                                document.getElementById('root')
+                            );
+                        }
+                        console.log('React application initialized!');
+                    } else {
+                        console.error('App component not found! Available globals:', Object.keys(window).filter(k => !k.startsWith('_')).join(', '));
+                    }
+                }, 1000); // 1 sekunda timeout
+            } catch (e) {
+                console.error('Failed to initialize React application:', e);
+            }
         };
         
         // Také zkusíme při DOMContentLoaded
@@ -98,12 +167,53 @@
     <!-- React Query pro správu stavu a cachování -->
     <script src="https://cdn.jsdelivr.net/npm/@tanstack/react-query@4.32.0/build/umd/index.production.js"></script>
     
+    <script>
+        // Pokus o přímou definici React Query objektů
+        try {
+            window.ReactQuery = window.tanstack || {};
+            
+            // Vytvořit QueryClient přímo zde
+            if (typeof window.ReactQuery.QueryClient !== 'undefined') {
+                window.queryClient = new window.ReactQuery.QueryClient({
+                    defaultOptions: {
+                        queries: {
+                            refetchOnWindowFocus: false,
+                            retry: 1,
+                        }
+                    }
+                });
+                window.QueryClientProvider = window.ReactQuery.QueryClientProvider;
+                console.log('QueryClient created early:', window.queryClient);
+            } else if (typeof window.tanstack !== 'undefined' && typeof window.tanstack.createQueryClient !== 'undefined') {
+                window.queryClient = new window.tanstack.createQueryClient({
+                    defaultOptions: {
+                        queries: {
+                            refetchOnWindowFocus: false,
+                            retry: 1,
+                        }
+                    }
+                });
+                window.QueryClientProvider = window.tanstack.QueryClientProvider;
+                console.log('tanstack QueryClient created early:', window.queryClient);
+            } else {
+                console.warn('Neither ReactQuery.QueryClient nor tanstack.createQueryClient is available yet');
+            }
+            
+            console.log('ReactQuery/tanstack objects:', window.tanstack, window.ReactQuery);
+        } catch (e) {
+            console.error('Error setting up ReactQuery:', e);
+        }
+    </script>
+    
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <!-- Utility functions -->
     <script type="text/babel" id="env-script" src="src/utils/env.js"></script>
     <script type="text/babel" id="helpers-script" src="src/utils/helpers.js"></script>
+    
+    <!-- Loader script pro alternativní dynamické načítání -->
+    <script type="text/babel" id="loader-script" src="src/loader.js"></script>
     
     <!-- Komponenty aplikace -->
     <script type="text/babel" id="header-script" src="src/components/layout/TabNavigation.js"></script>
@@ -124,6 +234,12 @@
     <script type="text/babel" id="app-script" src="src/App.js"></script>
 </head>
 <body>
-    <div id="root"></div>
+    <div id="root">
+        <!-- Sem React vykreslí aplikaci -->
+        <div style="text-align: center; margin-top: 50px; font-family: Arial, sans-serif;">
+            <h2>Načítání aplikace...</h2>
+            <p>Pokud se aplikace do 10 sekund nenačte, zkontrolujte prosím konzoli prohlížeče pro případné chyby.</p>
+        </div>
+    </div>
 </body>
 </html>

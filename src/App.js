@@ -312,3 +312,6 @@ const App = () => {
         </div>
     );
 };
+
+// Globální export pro přístup v HTML
+window.App = App;
