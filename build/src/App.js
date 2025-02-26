@@ -1,4 +1,7 @@
 // Hlavní aplikace
+// Explicitně definujeme React hooks
+const { useState, useEffect, useRef } = React;
+
 const App = () => {
     const [tabs, setTabs] = useState([]);
     const [activeTab, setActiveTab] = useState(null);
@@ -312,3 +315,6 @@ const App = () => {
         </div>
     );
 };
+
+// Globální export pro přístup v HTML
+window.App = App;
